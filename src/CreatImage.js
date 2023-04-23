@@ -1,7 +1,7 @@
 import React, { Component, useState } from "react";
 import axios from "axios";
 
-let API_SERVER_URL = "http://localhost:8080"
+let API_SERVER_URL = "http://34.170.41.219"
 
 const CreateImage = () => {
 
