@@ -3,7 +3,7 @@ import axios from "axios";
 
 let API_SERVER_URL = "http://34.170.41.219"
 
-const CreateImage = () => {
+const CreateImage = (props) => {
 
     const [imageName, setImageName] = useState("")
     const [albumName, setalbumName] = useState("")
@@ -49,13 +49,24 @@ const onInitNameChange = event => {
   return (
     <div>
      <h4>Image Create</h4>
-      Album Name : <input type="text" onChange={onAlbumNameChange} />
+       Album Name: <select
+            className="form-control"
+            name="select album"
+            onChange={onAlbumNameChange}
+          >
+            <option defaultValue>Select</option>
+            {props.albumData.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
       <br />
       Image Name : <input type="text" onChange={onImageNameChange} />
       <br />
-      color Name : <input type="text" onChange={onColourNameChange} />
+      Color : <input type="text" onChange={onColourNameChange} />
       <br />
-      size Name  : <input type="number" onChange={onSizeNameChange} />
+      Size Value : <input type="number" onChange={onSizeNameChange} />
       <br />
       Initials   : <input type="text" onChange={onInitNameChange} />
       <br />

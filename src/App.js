@@ -5,9 +5,8 @@ import axios from 'axios';
 import { Navigate, Link } from 'react-router-dom';
 import CreateImage from './CreatImage';
 import UploadImage from './UploadImage';
-
-
-
+import CreateAlbum from './CreateAlbum';
+import DeleteAlbum from './DeleteAlbum';
 let API_SERVER_URL = "http://34.170.41.219"
 
 function App() {
@@ -15,13 +14,18 @@ function App() {
   const [albumsData, setAlbumsData] = useState([]);
   const [currentAlbum, setCurrentAlbum] = useState("");
   const [imageData, setImageData] = useState([]);
+  const [tempState, setTempState] = useState("");
+
+  const rendercallback = (value) => {
+    setTempState(value); 
+  }
 
   useEffect(() => {
     axios.get(API_SERVER_URL+'/album').then((response) => {
       setAlbumsData(response.data.data);
       console.log(response.data.data)
     });
-  }, []);
+  } );
 
   const showAlert = (e) => {
     setCurrentAlbum(e.target.innerHTML);
@@ -48,17 +52,28 @@ let imageURL = API_SERVER_URL+"/image/album/fav/image/new.png"
     {/* <Link to="/createImage">CreateImage</Link>
     <br/>
      <Link to="/uploadImage">UploadImage</Link> */}
-     <CreateImage/>
+     <div style={{display: 'flex'}}>
+     <CreateImage albumData={albumsData}/>
+     <div style={{borderLeft: '2px solid black', margin: '4rem'}}></div>
+     <CreateAlbum rendercallback={rendercallback}/>
+     </div>
      <hr></hr>
-     <UploadImage />
+     <UploadImage albumData={albumsData} />
     <hr></hr>
+
+    <div style={{display: 'flex'}}>
+   
+    <div>
     <h3 style={{margin: '3rem'}}>Albums List</h3>
     {
      albumsData.length != 0 ?
     <ul>
       {list}
     </ul> : ""}
-
+    </div>
+    <div style={{borderLeft: '2px solid black', margin: '4rem'}}></div>
+    <DeleteAlbum albumData={albumsData}/>
+    </div>
   <hr/>
  {currentAlbum != "" ? <ImageWithName key={currentAlbum} albumName={currentAlbum}/> : ""}
   

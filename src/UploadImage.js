@@ -9,7 +9,8 @@ class UploadImage extends Component {
 	state = {
 	// Initially, no file is selected
     albumName: null,
-	selectedFile: null
+	selectedFile: null,
+	response: ""
 	};
 
     
@@ -47,7 +48,10 @@ class UploadImage extends Component {
 	
 	// Request made to the backend api
 	// Send formData object
-	axios.post(API_SERVER_URL+"/image/album/"+this.state.albumName+"/upload", formData);
+	axios.post(API_SERVER_URL+"/image/album/"+this.state.albumName+"/upload", formData). then((resp) =>
+	{
+		this.setState({ response: resp.data });
+	});
 	};
 	
 	// File content to be displayed after
@@ -60,14 +64,8 @@ class UploadImage extends Component {
 		<div>
 			<h2>File Details:</h2>
 			<p>File Name: {this.state.selectedFile.name}</p>
-
 			<p>File Type: {this.state.selectedFile.type}</p>
-
-			<p>
-			Last Modified:{" "}
-			{this.state.selectedFile.lastModifiedDate.toDateString()}
-			</p>
-
+			{this.state.response != "" ? <div>{this.state.response}</div>: ""}
 		</div>
 		);
 	} else {
@@ -87,7 +85,19 @@ class UploadImage extends Component {
 			Image Upload
 			</h4>
 			<div>
-                Album Name : <input type='text' onChange={this.onAlbumNameChange} /><br/>
+			Album Name: <select
+            className="form-control"
+            name="select album"
+            onChange={this.onAlbumNameChange}
+          >
+            <option defaultValue>Select</option>
+            {this.props.albumData.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select> <br/>
+                {/* Album Name : <input type='text' onChange={this.onAlbumNameChange} /><br/> */}
 				<input type="file" onChange={this.onFileChange} />
 				<button onClick={this.onFileUpload}>
 				Upload!
